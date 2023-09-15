@@ -20,6 +20,12 @@ const App = () => {
 
 
 return (
+  <div className="App">
+    <NavBar/>
+    home
+    <h2></h2>
+    <Cards/>
+  </div>
     
   
 );
