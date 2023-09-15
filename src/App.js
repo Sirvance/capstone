@@ -1,4 +1,5 @@
 import React, {useEffect, useState } from 'react'
+import NavBar from './components/navBar';
 import './App.css';
 
 const App = () => {
@@ -7,7 +8,7 @@ const App = () => {
   useEffect(() => {
     const getAllData = async () => {
       try{
-        const response = await fetch('https://fakestoreapi.com/items')
+        const response = await fetch('https://fakestoreapi.com/products')
         const { results } = await response.json()
         setItems(results)
       } catch (err) {
