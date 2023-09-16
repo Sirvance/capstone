@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/navBar';
+import ItemCards from './components/Cards';
 import './App.css';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
               Price: $
               {product.price}
             </p>
+            <ItemCards />
           </div>
         ))}
       </div>

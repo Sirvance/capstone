@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -28,9 +29,8 @@ ProductList.propTypes = {
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       // Add other prop types as needed
-    })
+    }),
   ).isRequired,
 };
 
 export default ProductList;
-
