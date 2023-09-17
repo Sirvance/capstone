@@ -6,6 +6,10 @@ import './App.css';
 
 function App() {
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
 
   useEffect(() => {
     const getAllData = async () => {
@@ -29,7 +33,7 @@ function App() {
           <div className="card-container">
             {products.map((product) => (
               <div key={product.id} className="product">
-                <ItemCards product={product} />
+                <ItemCards product={product} addToCart={() => addToCart(product)} />
                 {/* <img src={product.image} alt={product.title} />
                 <h3>{product.title}</h3>
                 <p>{product.description}</p>

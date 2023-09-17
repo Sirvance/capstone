@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-function ItemCards({ product }) {
+function ItemCards({ product, addToCart }) {
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Img variant="top" src={product.image} alt={product.title} />
@@ -14,7 +14,7 @@ function ItemCards({ product }) {
           Price: $
           {product.price}
         </Card.Text>
-        <Button variant="primary">Add to Cart</Button>
+        <Button variant="primary" onClick={addToCart}> Add to Cart </Button>
       </Card.Body>
     </Card>
   );
@@ -28,6 +28,7 @@ ItemCards.propTypes = {
     price: PropTypes.number.isRequired,
     image: PropTypes.string.isRequired,
   }).isRequired,
+  addToCart: PropTypes.func.isRequired,
 };
 
 export default ItemCards;
