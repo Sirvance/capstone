@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+/* Add these styles to your existing CSS file (App.css) */
+.product-list {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap to the next row */
+  justify-content: space-between; /* Space between cards */
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.product {
+  margin-bottom: 20px; /* Add some margin between cards */
+  width: calc(33.33% - 20px); /* Adjust the width as needed for your desired layout */
+}
+
+/* Additional styles for the cards if needed */
+.product .card {
+  /* Add your card styles here */
+}

@@ -25,19 +25,23 @@ function App() {
     <div className="App">
       <NavBar />
       <div className="product-list">
-        {products.map((product) => (
-          <div key={product.id} className="product">
-            <ItemCards product={product} />
-            {/* <img src={product.image} alt={product.title} />
-            <h3>{product.title}</h3>
-            <p>{product.description}</p>
-            <p>
-              Price: $
-              {product.price}
-            </p>
-            <ItemCards /> */}
+        {products.length > 0 && (
+          <div className="card-container">
+            {products.map((product) => (
+              <div key={product.id} className="product">
+                <ItemCards product={product} />
+                {/* <img src={product.image} alt={product.title} />
+                <h3>{product.title}</h3>
+                <p>{product.description}</p>
+                <p>
+                  Price: $
+                  {product.price}
+                </p>
+                <ItemCards /> */}
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
