@@ -1,28 +1,28 @@
-import React from 'react';
-// import PropTypes from 'prop-types';
-import { getCart } from '../../services/cartService';
+// import React from 'react';
+// // import PropTypes from 'prop-types';
+// import { getCart } from '../../services/cartService';
 
-function Cart() {
-  const cart = getCart();
-  return (
-    <div className="cart">
-      <h1>CART</h1>
-      <ul>
-        {cart.map((item) => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+// function Cart() {
+//   const cart = getCart();
+//   return (
+//     <div className="cart">
+//       <h1>CART</h1>
+//       <ul>
+//         {cart.map((item) => (
+//           <li key={item.id}>{item.title}</li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// }
 
-// Cart.propTypes = {
-//   cart: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number.isRequired,
-//       title: PropTypes.string.isRequired,
-//     }),
-//   ).isRequired,
-// };
+// // Cart.propTypes = {
+// //   cart: PropTypes.arrayOf(
+// //     PropTypes.shape({
+// //       id: PropTypes.number.isRequired,
+// //       title: PropTypes.string.isRequired,
+// //     }),
+// //   ).isRequired,
+// // };
 
-export default Cart;
+// export default Cart;
