@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-function HomePage() {
+function Home() {
   return (
     <div className="home">
       <h1>Welcome to our online store!</h1>
@@ -11,4 +11,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default Home;
