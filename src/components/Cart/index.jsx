@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 function CartComponent({ cart }) {
   const [loading, setLoading] = useState(true); // State to track loading state
@@ -34,6 +35,7 @@ function CartComponent({ cart }) {
 
   return (
     <div className="cart">
+      <Link to="/">Home</Link>
       <h1>CART</h1>
       {cartContent}
     </div>
