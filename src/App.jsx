@@ -1,16 +1,13 @@
-// Inside App.js
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/navBar';
 import ItemCards from './components/Cards';
 import CartComponent from './components/Cart';
-import Home from './components/Home';
 import './App.css';
 
 function App() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
-  const userAuthenticated = true;
 
   // Function to add items to the cart
   const addToCart = (product) => {
@@ -44,39 +41,38 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Home />
-      {userAuthenticated ? (
-        <div className="product-list">
-          {products.length > 0 && (
-            <div className="card-container">
-              {products.map((product) => (
-                <div key={product.id} className="product">
-                  <ItemCards
-                    product={product}
-                    addToCart={() => addToCart(product)} // Pass the product as an argument
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ) : (
-        <CartComponent cart={cart} />
-      )}
+
+      {/* Pass the addToCart function to ItemCards component */}
+      <div className="product-list">
+        {products.length > 0 && (
+          <div className="card-container">
+            {products.map((product) => (
+              <div key={product.id} className="product">
+                <ItemCards
+                  product={product}
+                  addToCart={() => addToCart(product)} // Pass the product as an argument
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Render the CartComponent and pass the cart items */}
+      <CartComponent cart={cart} />
     </div>
   );
 }
 
 export default App;
 
-// // App.js
+// // Inside App.js
 // import React, { useEffect, useState } from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import NavBar from './components/navBar';
 // import ItemCards from './components/Cards';
 // import CartComponent from './components/Cart';
-// import Home from './components/Home';
-// // import Login from './components/Login';
+// // import Home from './components/Home';
 // import './App.css';
 
 // function App() {
@@ -84,6 +80,7 @@ export default App;
 //   const [cart, setCart] = useState([]);
 //   const userAuthenticated = true;
 
+//   // Function to add items to the cart
 //   const addToCart = (product) => {
 //     // Check if the product is already in the cart
 //     const existingProductIndex = cart.findIndex((item) => item.id === product.id);
@@ -115,7 +112,7 @@ export default App;
 //   return (
 //     <div className="App">
 //       <NavBar />
-//       <Home />
+//       {/* <Home /> */}
 //       {userAuthenticated ? (
 //         <div className="product-list">
 //           {products.length > 0 && (
@@ -124,7 +121,7 @@ export default App;
 //                 <div key={product.id} className="product">
 //                   <ItemCards
 //                     product={product}
-//                     addToCart={() => addToCart(product)}
+//                     addToCart={() => addToCart(product)} // Pass the product as an argument
 //                   />
 //                 </div>
 //               ))}
@@ -133,7 +130,6 @@ export default App;
 //         </div>
 //       ) : (
 //         <CartComponent cart={cart} />
-//         /* Pass the central cart state as a prop to the Cart component */
 //       )}
 //     </div>
 //   );

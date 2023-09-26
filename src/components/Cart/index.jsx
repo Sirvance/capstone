@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function CartComponent() {
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]); // Sample product data, replace
+  const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
-
-  // useEffect(() => {
-  //   // Simulate loading cart data
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 1000);
-  // }, []);
 
   // Initialize cart from local storage when the component loads
   useEffect(() => {
@@ -20,26 +12,51 @@ function CartComponent() {
     if (storedCart) {
       setCart(JSON.parse(storedCart));
     }
-  }, [cart]);
+    setLoading(false);
+  }, []);
+
+  // Fetch product data when the component loads
   useEffect(() => {
-    fetch('https://fakestoreapi.com/carts') // Replace with the API endpoint
+    fetch('https://fakestoreapi.com/products')
       .then((response) => response.json())
       .then((data) => {
-        // Assuming the API response contains the list of products
-        setProducts(data); // Update the products state with API data
-        setLoading(false);
+        setProducts(data);
       })
       .catch((error) => {
         console.error('Error fetching product data:', error);
-        setLoading(false);
       });
-  }, [cart]);
+  }, []);
 
   // Define cartContent as null by default
   let cartContent = null;
 
-  // Check if cart is defined before accessing its properties
-  if (cart && cart.length > 0) {
+  const removeFromCart = (itemId) => {
+    // Find the item to remove from the cart
+    const itemToRemove = cart.find((item) => item.id === itemId);
+
+    if (itemToRemove) {
+      // If the item is in the cart, subtract 1 from its quantity
+      const updatedCart = cart.map((item) =>
+        item.id === itemId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      );
+
+      // Filter out items with quantity greater than 0
+      const filteredCart = updatedCart.filter((item) => item.quantity > 0);
+      setCart(filteredCart);
+
+      // Update local storage with the filtered cart
+      localStorage.setItem('cart', JSON.stringify(filteredCart));
+    }
+  };
+
+  const addToCart = () => {
+    // Implement the logic for adding items to the cart
+    // You can use a similar addToCart function as in your previous code
+  };
+
+  if (cart.length > 0) {
     cartContent = (
       <ul>
         {cart.map((item) => (
@@ -48,6 +65,9 @@ function CartComponent() {
             (Quantity:
             {item.quantity}
             )
+            <button type="button" onClick={() => removeFromCart(item.id)}>
+              Remove
+            </button>
           </li>
         ))}
       </ul>
@@ -55,38 +75,6 @@ function CartComponent() {
   } else if (!loading) {
     cartContent = <p>Your cart is empty.</p>;
   }
-
-  // Update cart and local storage when adding items
-  const addToCart = (product) => {
-    const existingProductIndex = cart.findIndex((item) => item.id === product.id);
-
-    if (existingProductIndex !== -1) {
-    // If it's in the cart, create a new cart with updated quantity
-      const updatedCart = [...cart];
-      updatedCart[existingProductIndex].quantity += 1;
-      setCart(updatedCart);
-    } else {
-    // If it's not in the cart, add it to the cart with a quantity of 1
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
-
-    // Update local storage with the updated cart
-    localStorage.setItem('cart', JSON.stringify(cart));
-  };
-  // const addToCart = (product) => {
-  //   // Check if the product is already in the cart
-  //   const existingProductIndex = cart.findIndex((item) => item.id === product.id);
-
-  //   if (existingProductIndex !== -1) {
-  //     // If it's in the cart, create a new cart with updated quantity
-  //     const updatedCart = [...cart];
-  //     updatedCart[existingProductIndex].quantity += 1;
-  //     setProducts(updatedCart);
-  //   } else {
-  //     // If it's not in the cart, add it to the cart with a quantity of 1
-  //     setProducts([...cart, { ...product, quantity: 1 }]);
-  //   }
-  // };
 
   return (
     <div className="cart">
@@ -96,185 +84,69 @@ function CartComponent() {
 
       {products.map((product) => (
         <div key={product.id}>
-          <h2>{product.name}</h2>
+          <h2>{product.title}</h2>
           <p>
             Price: $
             {product.price}
           </p>
-          <button type="button" onClick={() => addToCart(product)}>Add to Cart</button>
+          <button type="button" onClick={() => addToCart(product)}>
+            Add to Cart
+          </button>
         </div>
       ))}
     </div>
   );
 }
 
-// CartComponent.propTypes = {
-// cart: PropTypes.arrayOf(
-//   PropTypes.shape({
-//     id: PropTypes.number.isRequired,
-//     name: PropTypes.string.isRequired,
-//     quantity: PropTypes.number.isRequired,
-//   }),
-// ).isRequired,
-// };
 export default CartComponent;
 
 // import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
 // import { Link } from 'react-router-dom';
 
-// function CartComponent({ cart }) {
+// function CartComponent() {
 //   const [loading, setLoading] = useState(true);
-//   // const [products, setProducts] = useState([]); // Sample product data, replace
+//   const [products, setProducts] = useState([]);
+//   const [cart, setCart] = useState([]);
 
+//   // Initialize cart from local storage when the component loads
 //   useEffect(() => {
-//     // Simulate loading cart data
-//     setTimeout(() => {
-//       setLoading(false);
-//     }, 1000);
+//     const storedCart = localStorage.getItem('cart');
+//     if (storedCart) {
+//       setCart(JSON.parse(storedCart));
+//     }
+//     setLoading(false);
 //   }, []);
 
-//   // ... rest of your component code ...
-
-//   return (
-//     <div className="cart">
-//       <Link to="/">Home</Link>
-//       <h1>CART</h1>
-//       {cartContent}
-
-//       {/* Replace 'products' with your actual product data */}
-//       {/* {products.map((product) => (
-//         <div key={product.id}>
-//           <h2>{product.name}</h2>
-//           <p>
-//             Price: $
-//             {product.price}
-//           </p>
-//           <button onClick={() => addToCart(product)}>Add to Cart</button>
-//         </div>
-//       ))} */}
-//     </div>
-//   );
-// }
-
-// CartComponent.propTypes = {
-//   cart: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number.isRequired,
-//       name: PropTypes.string.isRequired,
-//       quantity: PropTypes.number.isRequired,
-//     }),
-//   ).isRequired,
-// };
-
-// export default CartComponent;
-
-// import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
-// import { Link } from 'react-router-dom';
-
-// function CartComponent({ cart }) {
-//   const [loading, setLoading] = useState(true);
-//   const [products, setProducts] = useState([]); // Sample product data, replace
-//   const [cartState, setCart] = useState(cart); // State to manage the cart
-
+//   // Fetch product data when the component loads
 //   useEffect(() => {
-//     // Simulate loading cart data
-//     setTimeout(() => {
-//       setLoading(false);
-//     }, 1000);
+//     fetch('https://fakestoreapi.com/products')
+//       .then((response) => response.json())
+//       .then((data) => {
+//         setProducts(data);
+//       })
+//       .catch((error) => {
+//         console.error('Error fetching product data:', error);
+//       });
 //   }, []);
 
 //   // Define cartContent as null by default
 //   let cartContent = null;
 
-//   // Check if cartState is defined before accessing its properties
-//   if (cartState && cartState.length > 0) {
-//     cartContent = (
-//       <ul>
-//         {cartState.map((item) => (
-//           <li key={item.id}>
-//             {item.name}
-//             (Quantity:
-//             {item.quantity}
-//             )
-//           </li>
-//         ))}
-//       </ul>
-//     );
-//   } else if (!loading) {
-//     cartContent = <p>Your cart is empty.</p>;
-//   }
+//   const removeFromCart = (itemId) => {
+//     // Filter out the item to remove from the cart
+//     const updatedCart = cart.filter((item) => item.id !== itemId);
+//     setCart(updatedCart);
 
-//   const addToCart = (product) => {
-//     // Check if the product is already in the cart
-//     const existingProductIndex = cartState.findIndex((item) => item.id === product.id);
-
-//     if (existingProductIndex !== -1) {
-//       // If it's in the cart, create a new cart with updated quantity
-//       const updatedCart = [...cartState];
-//       updatedCart[existingProductIndex].quantity += 1;
-//       setCart(updatedCart);
-//     } else {
-//       // If it's not in the cart, add it to the cart with a quantity of 1
-//       setCart([...cartState, { ...product, quantity: 1 }]);
-//     }
+//     // Update local storage with the updated cart
+//     localStorage.setItem('cart', JSON.stringify(updatedCart));
 //   };
 
-//   // Render the cart and products
-//   return (
-//     <div className="cart">
-//       <Link to="/">Home</Link>
-//       <h1>CART</h1>
-//       {cartContent}
+//   const addToCart = () => {
+//     // Implement the logic for adding items to the cart
+//     // You can use a similar addToCart function as in your previous code
+//   };
 
-//       {/* Replace 'products' with your actual product data */}
-//        {products.map((product) => (
-//         <div key={product.id}>
-//           <h2>{product.name}</h2>
-//           <p>
-//             Price: $
-//             {product.price}
-//           </p>
-//           <button type="button" onClick={() => addToCart(product)}>Add to Cart</button>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// CartComponent.propTypes = {
-//   cart: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number.isRequired,
-//       name: PropTypes.string.isRequired,
-//       quantity: PropTypes.number.isRequired,
-//     }),
-//   ).isRequired,
-// };
-
-// export default CartComponent;
-
-// import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
-// import { Link } from 'react-router-dom';
-
-// function CartComponent({ cart }) {
-//   const [loading, setLoading] = useState(true);
-//   const [products, setProducts] = useState([]); // Sample product data, replace
-
-//   useEffect(() => {
-//     // Simulate loading cart data
-//     setTimeout(() => {
-//       setLoading(false);
-//     }, 1000);
-//   }, []);
-
-//   // Define cartContent as null by default
-//   let cartContent = null;
-
-//   // Check if cart is defined before accessing its properties
-//   if (cart && cart.length > 0) {
+//   if (cart.length > 0) {
 //     cartContent = (
 //       <ul>
 //         {cart.map((item) => (
@@ -283,6 +155,9 @@ export default CartComponent;
 //             (Quantity:
 //             {item.quantity}
 //             )
+//             <button type="button" onClick={() => removeFromCart()}>
+//               Remove
+//             </button>
 //           </li>
 //         ))}
 //       </ul>
@@ -290,21 +165,6 @@ export default CartComponent;
 //   } else if (!loading) {
 //     cartContent = <p>Your cart is empty.</p>;
 //   }
-
-//   const addToCart = (product) => {
-//     // Check if the product is already in the cart
-//     const existingProductIndex = cart.findIndex((item) => item.id === product.id);
-
-//     if (existingProductIndex !== -1) {
-//       // If it's in the cart, create a new cart with updated quantity
-//       const updatedCart = [...cart];
-//       updatedCart[existingProductIndex].quantity += 1;
-//       setCart(updatedCart);
-//     } else {
-//       // If it's not in the cart, add it to the cart with a quantity of 1
-//       setCart([...cart, { ...product, quantity: 1 }]);
-//     }
-//   };
 
 //   return (
 //     <div className="cart">
@@ -314,49 +174,69 @@ export default CartComponent;
 
 //       {products.map((product) => (
 //         <div key={product.id}>
-//           <h2>{product.name}</h2>
+//           <h2>{product.title}</h2>
 //           <p>
 //             Price: $
 //             {product.price}
 //           </p>
-//           <button onClick={() => addToCart(product)}>Add to Cart</button>
+//           <button type="button" onClick={() => addToCart(product)}>
+//             Add to Cart
+//           </button>
 //         </div>
 //       ))}
 //     </div>
 //   );
 // }
 
-// CartComponent.propTypes = {
-//   cart: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number.isRequired,
-//       name: PropTypes.string.isRequired,
-//       quantity: PropTypes.number.isRequired,
-//     }),
-//   ).isRequired,
-// };
-
 // export default CartComponent;
 
-// import React, { useEffect, useState } from 'react';
-// import PropTypes from 'prop-types';
+// import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
 
-// function CartComponent({ cart }) {
-//   const [loading, setLoading] = useState(true); // State to track loading state
+// function CartComponent() {
+//   const [loading, setLoading] = useState(true);
+//   const [products, setProducts] = useState([]);
+//   const [cart, setCart] = useState([]);
 
+//   // Initialize cart from local storage when the component loads
 //   useEffect(() => {
-//     // Simulate loading cart data
-//     setTimeout(() => {
-//       setLoading(false);
-//     }, 1000);
-//   }, []); // The empty dependency array ensures this effect runs once when the component mounts
+//     const storedCart = localStorage.getItem('cart');
+//     if (storedCart) {
+//       setCart(JSON.parse(storedCart));
+//     }
+//     setLoading(false);
+//   }, []);
+
+//   // Fetch product data when the component loads
+//   useEffect(() => {
+//     fetch('https://fakestoreapi.com/products')
+//       .then((response) => response.json())
+//       .then((data) => {
+//         setProducts(data);
+//       })
+//       .catch((error) => {
+//         console.error('Error fetching product data:', error);
+//       });
+//   }, []);
 
 //   // Define cartContent as null by default
 //   let cartContent = null;
 
-//   // Check if cart is defined before accessing its properties
-//   if (cart && cart.length > 0) {
+//   const removeFromCart = (itemId) => {
+//     // Filter out the item to remove from the cart
+//     const updatedCart = cart.filter((item) => item.id !== itemId);
+//     setCart(updatedCart);
+
+//     // Update local storage with the updated cart
+//     localStorage.setItem('cart', JSON.stringify(updatedCart));
+//   };
+
+//   const addToCart = (product) => {
+//     // Implement the logic for adding items to the cart
+//     // You can use a similar addToCart function as in your previous code
+//   };
+
+//   if (cart.length > 0) {
 //     cartContent = (
 //       <ul>
 //         {cart.map((item) => (
@@ -365,6 +245,7 @@ export default CartComponent;
 //             (Quantity:
 //             {item.quantity}
 //             )
+//             <button onClick={() => removeFromCart(item.id)}>Remove</button>
 //           </li>
 //         ))}
 //       </ul>
@@ -378,19 +259,21 @@ export default CartComponent;
 //       <Link to="/">Home</Link>
 //       <h1>CART</h1>
 //       {cartContent}
+
+//       {products.map((product) => (
+//         <div key={product.id}>
+//           <h2>{product.title}</h2>
+//           <p>
+//             Price: $
+//             {product.price}
+//           </p>
+//           <button type="button" onClick={() => addToCart(product)}>
+//             Add to Cart
+//           </button>
+//         </div>
+//       ))}
 //     </div>
 //   );
 // }
-
-// CartComponent.propTypes = {
-//   cart: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number.isRequired,
-//       name: PropTypes.string.isRequired,
-//       quantity: PropTypes.number.isRequired,
-//       // Add any other required prop types for each item in the cart
-//     }),
-//   ).isRequired,
-// };
 
 // export default CartComponent;
