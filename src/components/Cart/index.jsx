@@ -39,8 +39,7 @@ function CartComponent() {
       const updatedCart = cart.map((item) =>
         item.id === itemId
           ? { ...item, quantity: item.quantity - 1 }
-          : item
-      );
+          : item);
 
       // Filter out items with quantity greater than 0
       const filteredCart = updatedCart.filter((item) => item.quantity > 0);

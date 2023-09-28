@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import Filter from '../Productfilter';
 
 function NavBar() {
   return (
@@ -34,6 +35,7 @@ function NavBar() {
               <Link className="nav-link" to="/login">Login</Link>
               {/* Link to Login */}
             </li>
+            <Filter />
           </ul>
         </div>
       </div>

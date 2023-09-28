@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+// import Filter from '../Productfilter';
 
 function ItemCards({ product, addToCart }) {
   const [showDetails, setShowDetails] = useState(false);
