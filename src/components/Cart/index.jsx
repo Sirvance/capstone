@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function CartComponent() {
-  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
 
@@ -12,7 +11,6 @@ function CartComponent() {
     if (storedCart) {
       setCart(JSON.parse(storedCart));
     }
-    setLoading(false);
   }, []);
 
   // Fetch product data when the component loads
@@ -27,72 +25,34 @@ function CartComponent() {
       });
   }, []);
 
-  // Define cartContent as null by default
-  let cartContent = null;
+  const calculateTotalItems = () => cart.reduce((total, item) => total + item.quantity, 0);
 
-  const removeFromCart = (itemId) => {
-    // Find the item to remove from the cart
-    const itemToRemove = cart.find((item) => item.id === itemId);
+  const calculateTotalPrice = () => cart.reduce((total, item) => {
+    const product = products.find((p) => p.id === item.id);
 
-    if (itemToRemove) {
-      // If the item is in the cart, subtract 1 from its quantity
-      const updatedCart = cart.map((item) =>
-        item.id === itemId
-          ? { ...item, quantity: item.quantity - 1 }
-          : item);
-
-      // Filter out items with quantity greater than 0
-      const filteredCart = updatedCart.filter((item) => item.quantity > 0);
-      setCart(filteredCart);
-
-      // Update local storage with the filtered cart
-      localStorage.setItem('cart', JSON.stringify(filteredCart));
+    // Check if product is defined before accessing its price property
+    if (product) {
+      return total + product.price * item.quantity;
     }
-  };
 
-  const addToCart = () => {
-    // Implement the logic for adding items to the cart
-    // You can use a similar addToCart function as in your previous code
-  };
-
-  if (cart.length > 0) {
-    cartContent = (
-      <ul>
-        {cart.map((item) => (
-          <li key={item.id}>
-            {item.name}
-            (Quantity:
-            {item.quantity}
-            )
-            <button type="button" onClick={() => removeFromCart(item.id)}>
-              Remove
-            </button>
-          </li>
-        ))}
-      </ul>
-    );
-  } else if (!loading) {
-    cartContent = <p>Your cart is empty.</p>;
-  }
+    return total;
+  }, 0).toFixed(2); // Round to 2 decimal places
 
   return (
     <div className="cart">
       <Link to="/">Home</Link>
-      <h1>CART</h1>
-      {cartContent}
-
-      {products.map((product) => (
-        <div key={product.id}>
-          <h2>{product.title}</h2>
-          <p>
-            Price: $
-            {product.price}
-          </p>
-          <button type="button" onClick={() => addToCart(product)}>
-            Add to Cart
-          </button>
-        </div>
-      ))}
+      <h1>Checkout</h1>
+      <div className="cart-content">
+        <p>
+          Total Items in Cart:
+          {calculateTotalItems()}
+        </p>
+        <p>
+          Total Price: $
+          {calculateTotalPrice()}
+        </p>
+        <button type="button">Checkout</button>
+      </div>
     </div>
   );
 }
@@ -101,9 +61,9 @@ export default CartComponent;
 
 // import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
+// import ItemCards from '../Cards';
 
 // function CartComponent() {
-//   const [loading, setLoading] = useState(true);
 //   const [products, setProducts] = useState([]);
 //   const [cart, setCart] = useState([]);
 
@@ -113,7 +73,6 @@ export default CartComponent;
 //     if (storedCart) {
 //       setCart(JSON.parse(storedCart));
 //     }
-//     setLoading(false);
 //   }, []);
 
 //   // Fetch product data when the component loads
@@ -127,9 +86,6 @@ export default CartComponent;
 //         console.error('Error fetching product data:', error);
 //       });
 //   }, []);
-
-//   // Define cartContent as null by default
-//   let cartContent = null;
 
 //   const removeFromCart = (itemId) => {
 //     // Filter out the item to remove from the cart
@@ -140,49 +96,70 @@ export default CartComponent;
 //     localStorage.setItem('cart', JSON.stringify(updatedCart));
 //   };
 
-//   const addToCart = () => {
-//     // Implement the logic for adding items to the cart
-//     // You can use a similar addToCart function as in your previous code
-//   };
+//   const calculateTotalItems = () => cart.reduce((total, item) => total + item.quantity, 0);
 
-//   if (cart.length > 0) {
-//     cartContent = (
-//       <ul>
-//         {cart.map((item) => (
-//           <li key={item.id}>
-//             {item.name}
-//             (Quantity:
-//             {item.quantity}
-//             )
-//             <button type="button" onClick={() => removeFromCart()}>
-//               Remove
-//             </button>
-//           </li>
-//         ))}
-//       </ul>
-//     );
-//   } else if (!loading) {
-//     cartContent = <p>Your cart is empty.</p>;
-//   }
+//   const calculateTotalPrice = () => cart.reduce((total, item) => {
+//     const product = products.find((p) => p.id === item.id);
+
+//     // Check if product is defined before accessing its price property
+//     if (product) {
+//       return total + product.price * item.quantity;
+//     }
+
+//     return total;
+//   }, 0).toFixed(2); // Round to 2 decimal places
+
+//   // const calculateTotalPrice = () => cart.reduce((total, item) => {
+//   //   const product = products.find((p) => p.id === item.id);
+//   //   return total + product.price * item.quantity;
+//   // }, 0).toFixed(2); // Round to 2 decimal places
 
 //   return (
 //     <div className="cart">
 //       <Link to="/">Home</Link>
-//       <h1>CART</h1>
-//       {cartContent}
+//       <h1>Checkout</h1>
+//       <div className="cart-content">
+//         <p>
+//           Total Items in Cart:
+//           {calculateTotalItems()}
+//         </p>
+//         <p>
+//           Total Price: $
+//           {calculateTotalPrice()}
+//         </p>
+//         {cart.length > 0 ? (
+//           <ul>
+//             {cart.map((item) => (
+//               <li key={item.id}>
+//                 {item.name}
+//                 (Quantity:
+//                 {item.quantity}
+//                 )
+//                 <button type="button" onClick={() => removeFromCart(item.id)}>
+//                   Remove
+//                 </button>
+//               </li>
+//             ))}
+//           </ul>
+//         ) : (
+//           <p>Your cart is empty.</p>
+//         )}
+//       </div>
 
-//       {products.map((product) => (
-//         <div key={product.id}>
-//           <h2>{product.title}</h2>
-//           <p>
-//             Price: $
-//             {product.price}
-//           </p>
-//           <button type="button" onClick={() => addToCart(product)}>
-//             Add to Cart
-//           </button>
-//         </div>
-//       ))}
+//       <div className="product-list">
+//         {products.length > 0 && (
+//           <div className="card-container">
+//             {products.map((product) => (
+//               <div key={product.id} className="product">
+//                 <ItemCards
+//                   product={product}
+//                   // If addToCart is needed here, add it.
+//                 />
+//               </div>
+//             ))}
+//           </div>
+//         )}
+//       </div>
 //     </div>
 //   );
 // }
@@ -191,9 +168,9 @@ export default CartComponent;
 
 // import React, { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
+// import ItemCards from '../Cards';
 
 // function CartComponent() {
-//   const [loading, setLoading] = useState(true);
 //   const [products, setProducts] = useState([]);
 //   const [cart, setCart] = useState([]);
 
@@ -203,7 +180,6 @@ export default CartComponent;
 //     if (storedCart) {
 //       setCart(JSON.parse(storedCart));
 //     }
-//     setLoading(false);
 //   }, []);
 
 //   // Fetch product data when the component loads
@@ -218,8 +194,106 @@ export default CartComponent;
 //       });
 //   }, []);
 
-//   // Define cartContent as null by default
-//   let cartContent = null;
+//   const removeFromCart = (itemId) => {
+//     // Filter out the item to remove from the cart
+//     const updatedCart = cart.filter((item) => item.id !== itemId);
+//     setCart(updatedCart);
+
+//     // Update local storage with the updated cart
+//     localStorage.setItem('cart', JSON.stringify(updatedCart));
+//   };
+
+//   const calculateTotalItems = () =>
+//     // Calculate the total number of items in the cart
+//     cart.reduce((total, item) => total + item.quantity, 0);
+
+//   const calculateTotalPrice = () =>
+//     // Calculate the total price of items in the cart
+//     cart.reduce((total, item) => {
+//       const product = products.find((p) => p.id === item.id);
+//       return total + product.price * item.quantity;
+//     }, 0).toFixed(2); // Round to 2 decimal places
+
+//   return (
+//     <div className="cart">
+//       <Link to="/">Home</Link>
+//       <h1>Checkout</h1>
+//       <div className="cart-content">
+//         <p>
+//           Total Items in Cart:
+//           {calculateTotalItems()}
+//         </p>
+//         <p>
+//           Total Price: $
+//           {calculateTotalPrice()}
+//         </p>
+//         {cart.length > 0 ? (
+//           <ul>
+//             {cart.map((item) => (
+//               <li key={item.id}>
+//                 {item.name}
+//                 (Quantity:
+//                 {item.quantity}
+//                 )
+//                 <button type="button" onClick={() => removeFromCart(item.id)}>
+//                   Remove
+//                 </button>
+//               </li>
+//             ))}
+//           </ul>
+//         ) : (
+//           <p>Your cart is empty.</p>
+//         )}
+//       </div>
+
+//       <div className="product-list">
+//         {products.length > 0 && (
+//           <div className="card-container">
+//             {products.map((product) => (
+//               <div key={product.id} className="product">
+//                 <ItemCards
+//                   product={product}
+//                   // If addToCart is needed here, add it.
+//                 />
+//               </div>
+//             ))}
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default CartComponent;
+
+// import React, { useState, useEffect } from 'react';
+// import { Link } from 'react-router-dom';
+// import ItemCards from '../Cards';
+
+// function CartComponent() {
+//   const [products, setProducts] = useState([]);
+//   const [cart, setCart] = useState([]);
+//   const [selectedProducts, setSelectedProducts] = useState([]);
+
+//   // Initialize cart from local storage when the component loads
+//   useEffect(() => {
+//     const storedCart = localStorage.getItem('cart');
+//     if (storedCart) {
+//       setCart(JSON.parse(storedCart));
+//     }
+//   }, []);
+
+//   // Fetch product data when the component loads
+//   useEffect(() => {
+//     fetch('https://fakestoreapi.com/products')
+//       .then((response) => response.json())
+//       .then((data) => {
+//         setProducts(data);
+//       })
+//       .catch((error) => {
+//         console.error('Error fetching product data:', error);
+//       });
+//   }, []);
 
 //   const removeFromCart = (itemId) => {
 //     // Filter out the item to remove from the cart
@@ -232,45 +306,55 @@ export default CartComponent;
 
 //   const addToCart = (product) => {
 //     // Implement the logic for adding items to the cart
-//     // You can use a similar addToCart function as in your previous code
-//   };
+//     // You can add the selected product to the cart and selectedProducts state
+//     // to track which products are added to the cart
+//     const updatedCart = [...cart, { id: product.id, name: product.title, quantity: 1 }];
+//     setCart(updatedCart);
+//     setSelectedProducts([...selectedProducts, product.id]);
 
-//   if (cart.length > 0) {
-//     cartContent = (
-//       <ul>
-//         {cart.map((item) => (
-//           <li key={item.id}>
-//             {item.name}
-//             (Quantity:
-//             {item.quantity}
-//             )
-//             <button onClick={() => removeFromCart(item.id)}>Remove</button>
-//           </li>
-//         ))}
-//       </ul>
-//     );
-//   } else if (!loading) {
-//     cartContent = <p>Your cart is empty.</p>;
-//   }
+//     // Update local storage with the updated cart
+//     localStorage.setItem('cart', JSON.stringify(updatedCart));
+//   };
 
 //   return (
 //     <div className="cart">
 //       <Link to="/">Home</Link>
-//       <h1>CART</h1>
-//       {cartContent}
+//       <h1>Checkout</h1>
+//       <div className="cart-content">
+//         {cart.length > 0 ? (
+//           <ul>
+//             {cart.map((item) => (
+//               <li key={item.id}>
+//                 {item.name}
+//                 (Quantity:
+//                 {item.quantity}
+//                 )
+//                 <button type="button" onClick={() => removeFromCart(item.id)}>
+//                   Remove
+//                 </button>
+//               </li>
+//             ))}
+//           </ul>
+//         ) : (
+//           <p>Your cart is empty.</p>
+//         )}
+//       </div>
 
-//       {products.map((product) => (
-//         <div key={product.id}>
-//           <h2>{product.title}</h2>
-//           <p>
-//             Price: $
-//             {product.price}
-//           </p>
-//           <button type="button" onClick={() => addToCart(product)}>
-//             Add to Cart
-//           </button>
-//         </div>
-//       ))}
+//       <div className="product-list">
+//         {products.length > 0 && (
+//           <div className="card-container">
+//             {products.map((product) => (
+//               <div key={product.id} className="product">
+//                 <ItemCards
+//                   product={product}
+//                   addToCart={addToCart}
+//                 />
+//               </div>
+//             ))}
+//           </div>
+//         )}
+//       </div>
+//       {/* <CartComponent cart={cart} /> */}
 //     </div>
 //   );
 // }

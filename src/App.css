@@ -33,29 +33,56 @@
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg);
-  }
-}
+    transform: rotate(360deg)
+  }}
 
-/* Add these styles to your existing CSS file (App.css) */
-.product-list {
-  display: flex;
-  flex-wrap: wrap; /* Allow cards to wrap to the next row */
-  justify-content: space-between; /* Space between cards */
-}
+  /* App.css */
 
 .card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  gap: 20px; /* Adjust the gap between cards as needed */
 }
 
-.product {
-  margin-bottom: 20px; /* Add some margin between cards */
-  width: calc(33.33% - 20px); /* Adjust the width as needed for your desired layout */
+.product-card {
+  flex-basis: calc(25% - 20px); /* Adjust the card width and gap */
 }
 
-/* Additional styles for the cards if needed */
-.product .card {
-  /* Add your card styles here */
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px; /* Adjust the gap between items as needed */
 }
+
+.item-card {
+  flex-basis: calc(25% - 20px); /* Adjust the item width and gap */
+}
+
+/* Add these styles to your CSS file */
+.cart {
+  display: flex;
+  flex-direction: column;
+  align-items:center; /* Center horizontally */
+  justify-content:baseline; /* Center vertically */
+  min-height: 20vh; /* Make it at least 100% of the viewport height */
+
+}
+
+.cart-content {
+  text-align: center;
+  align-self: center;
+  margin: 0.5cm; /* Center the content inside .cart-content */
+}
+
+/* Add these styles to your CSS file */
+.bg-body-tertiary {
+  display: flex;
+  flex-direction:row;
+  align-items:center; /* Center horizontally */
+  justify-content:space-around; /* Center vertically */
+  min-height: 20vh; /* Make it at least 100% of the viewport height */
+  margin: 5cm;
+}
+
