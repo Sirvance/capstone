@@ -18,6 +18,12 @@ function App() {
     setCart(updatedCart);
     setSelectedProducts([...selectedProducts, product.id]);
   };
+  // Define the removeFromCart function
+  const removeFromCart = (productId) => {
+  // Filter out the item to remove from the cart
+    const updatedCart = cart.filter((item) => item.id !== productId);
+    setCart(updatedCart);
+  };
 
   // Initialize cart from local storage when the component loads
   useEffect(() => {
@@ -58,6 +64,7 @@ function App() {
                 <ItemCards
                   product={product}
                   addToCart={addToCart}
+                  removeFromCart={removeFromCart}
                 />
               </div>
             ))}

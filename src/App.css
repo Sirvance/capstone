@@ -39,10 +39,13 @@
   /* App.css */
 
 .card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display:flex;
+  flex-flow:row;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
   gap: 20px; /* Adjust the gap between cards as needed */
+  
 }
 
 .product-card {
@@ -57,7 +60,7 @@
 }
 
 .item-card {
-  flex-basis: calc(25% - 20px); /* Adjust the item width and gap */
+  flex-basis: calc(20% - 22px); /* Adjust the item width and gap */
 }
 
 /* Add these styles to your CSS file */
@@ -85,4 +88,5 @@
   min-height: 20vh; /* Make it at least 100% of the viewport height */
   margin: 5cm;
 }
+
 

@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 // import Filter from '../Productfilter';
 
-function ItemCards({ product, addToCart }) {
+function ItemCards({ product, addToCart, removeFromCart }) {
   const [showDetails, setShowDetails] = useState(false);
 
   const toggleDetails = () => {
@@ -29,6 +29,9 @@ function ItemCards({ product, addToCart }) {
             <Button variant="primary" onClick={addToCart}>
               Add to Cart
             </Button>
+            <Button variant="danger" onClick={() => removeFromCart(product.id)}>
+              Remove
+            </Button>
           </div>
         )}
       </Card.Body>
@@ -39,12 +42,14 @@ function ItemCards({ product, addToCart }) {
 // Define the expected prop types
 ItemCards.propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     image: PropTypes.string.isRequired,
   }).isRequired,
   addToCart: PropTypes.func.isRequired,
+  removeFromCart: PropTypes.func.isRequired,
 };
 
 export default ItemCards;
